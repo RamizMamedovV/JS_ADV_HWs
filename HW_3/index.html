@@ -63,7 +63,7 @@
     При клике на название продукта отображается список всех отзывов по этому продукту.
     Возможность удаления отзыва (при нажатии на кнопку "Удалить" рядом с отзывом, данный отзыв удаляется из LocalStorage).
     -->
-    
+
     <h1>Reviews and Preferences</h1>
 
     <label for="inputId">Enter Title:</label>
@@ -73,8 +73,12 @@
     <textarea name="textArea" id="textId" class="textAreaClass hidden"></textarea>
 
     <button class="addBtn btn hidden">ADD COMMENT</button>
-    <!-- <button class="addBtn hidden">ADD COMMENT</button> -->
+
+    <button class="printBtn btn">PRINT TITLES</button>
+
     <div class="commentsArea">
+        <h2 class="h2Elem"></h2>
+        <ul class="ulElem"></ul>
         <p class="comments"></p>
         <button class="delBtn btn hidden">DELETE COMMENT</button>
     </div>
@@ -86,7 +90,11 @@
         const commentsArea = document.querySelector('.commentsArea');
         const commentsEl = document.querySelector('.comments');
         const delBtn = document.querySelector('.delBtn');
-        
+
+        const printBtn = document.querySelector('.printBtn');
+        const h2Elem = document.querySelector('.h2Elem');
+        const ulElem = document.querySelector('.ulElem');
+
         const inputEl = document.querySelector('.inputClass');
 
         const textLable = document.querySelector('.textLable');
@@ -97,10 +105,17 @@
         let newTitle = '';
         let comment = '';
 
+        let counterForPrintBtn = 1;
+
         inputEl.addEventListener('keydown', function (e) {
             if (e.key === 'Enter') {
+
+                h2Elem.classList.add('hidden');
+                ulElem.classList.add('hidden');
+
                 newTitle = inputEl.value.trim();
-                const hasTitle = localStorage.getItem(newTitle) || false;
+                let hasTitle = localStorage.getItem(newTitle) || false;
+                console.log(hasTitle);
                 if (hasTitle) {
                     processData(hasTitle);
                 } else if (newTitle) {
@@ -132,9 +147,12 @@
             textLable.classList.add('hidden');
             commentEl.classList.add('hidden');
             inputEl.value = '';
+            commentEl.value = '';
         });
 
         function processData(title) {
+            delBtn.classList.remove('hidden');
+            commentsArea.classList.remove('hidden');
             commentsEl.textContent = title;
             delBtn.classList.remove('hidden');
         }
@@ -146,7 +164,36 @@
             delBtn.classList.add('hidden');
             commentsArea.classList.add('hidden');
             inputEl.value = '';
+            commentEl.value = '';
         });
+
+        printBtn.addEventListener('click', function (e) {
+            if(counterForPrintBtn > 0) {
+
+                
+                h2Elem.classList.remove('hidden');
+                ulElem.classList.remove('hidden');
+                const allKeys = Object.keys(localStorage);
+                
+                h2Elem.textContent = 'ALL KEYS:'
+                
+                for (let i = 0; i < allKeys.length; i++) {
+                    const liElem = document.createElement('li');
+                    liElem.textContent = allKeys[i];
+                    ulElem.appendChild(liElem)
+                }
+                 counterForPrintBtn--;
+            } else {
+                ulElem.replaceChildren();
+                h2Elem.classList.add('hidden');
+                ulElem.classList.add('hidden');
+                counterForPrintBtn++;
+            }
+
+        });
+
+
+
 
     </script>
 </body>
