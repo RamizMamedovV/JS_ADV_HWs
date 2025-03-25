@@ -152,7 +152,7 @@
 
         function processData(title) {
             delBtn.classList.remove('hidden');
-            commentsArea.classList.remove('hidden');
+            commentsEl.classList.remove('hidden');
             commentsEl.textContent = title;
             delBtn.classList.remove('hidden');
         }
@@ -162,9 +162,10 @@
             localStorage.removeItem(newTitle);
             alert('the comment deleted');
             delBtn.classList.add('hidden');
-            commentsArea.classList.add('hidden');
+            commentsEl.classList.add('hidden');
             inputEl.value = '';
             commentEl.value = '';
+            ulElem.innerHTML = '';
         });
 
         printBtn.addEventListener('click', function (e) {
@@ -183,11 +184,14 @@
                     ulElem.appendChild(liElem)
                 }
                  counterForPrintBtn--;
+                 console.log(counterForPrintBtn);
             } else {
-                ulElem.replaceChildren();
+                // ulElem.replaceChildren();
+                ulElem.innerHTML = '';
                 h2Elem.classList.add('hidden');
                 ulElem.classList.add('hidden');
                 counterForPrintBtn++;
+                console.log(counterForPrintBtn);
             }
 
         });
