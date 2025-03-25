@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .main {
+            position: absolute;
+            top: 50px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: #bfa7a7;
+            height: 50px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: end;
+            align-items: center;
+        }
+
+        span {
+            display: flex;
+            justify-content: center;
+            width: 80%;
+        }
+
+        .btn {
+            height: 50px;
+            width: 150px;
+            background: #e7d4d4;
+        }
+
+        .commentsBtns {
+            display: flex;
+            gap: 20px;
+        }
+
+        input {
+            width: 250px;
+            height: 150px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 
+    Создайте интерактивную веб-страницу для оставления и просмотра отзывов о продуктах. Пользователи могут добавлять отзывы о различных продуктах и просматривать добавленные отзывы.
+
+    Страница добавления отзыва:
+
+    Поле для ввода названия продукта.
+    Текстовое поле для самого отзыва.
+    Кнопка "Добавить отзыв", которая сохраняет отзыв о продукте в LocalStorage.
+
+    Страница просмотра отзывов:
+
+    Показывает список всех продуктов, о которых были оставлены отзывы.
+    При клике на название продукта отображается список всех отзывов по этому продукту.
+    Возможность удаления отзыва (при нажатии на кнопку "Удалить" рядом с отзывом, данный отзыв удаляется из LocalStorage).
+    -->
+
+    <div class="header">
+        <span>YOU CAN ADD PRODUCT</span>
+        <button style="margin: 0 50px; height: 100%;" class="addProduct btn">ADD PRODUCT</button>
+    </div>
+    <div class="main">
+        <div class="imgInputElem"></div>
+        <div class="commentsBtns"></div>
+    </div>
+
+    <script>
+        const addBtn = document.querySelector('.addProduct');
+        const main = document.querySelector('.main');
+        const imgInputElem = document.querySelector('.imgInputElem');
+        const commentsBtns = document.querySelector('.commentsBtns');
+
+        // const commentArray = [];
+        // localStorage.setItem('comments')
+        
+        window.addEventListener('load', function (e) {
+            const commentArray = localStorage.getItem('comments') || [];
+            let commentCount = commentArray.length;
+            console.log(commentArray);
+            console.log(commentCount);
+            if(commentCount > 0) fillWeb(commentArray);
+        });
+
+        function fillWeb(array) {
+            array.forEach(element => {
+                
+            });
+        }
+
+        addBtn.addEventListener('click', function (e) {
+            const img = document.createElement('img');
+            img.src = '../';
+            img.alt = 'FOTO';
+
+            const addCommentBtn = document.createElement('button');
+            addCommentBtn.classList.add('btn');
+            addCommentBtn.textContent = 'ADD COMMENT';
+
+            const delCommentBtn = document.createElement('button');
+            delCommentBtn.classList.add('btn');
+            delCommentBtn.textContent = 'DELETE COMMENT';
+
+
+            imgInputElem.appendChild(img);
+            commentsBtns.appendChild(addCommentBtn);
+            commentsBtns.appendChild(delCommentBtn);
+        // });
+
+        delCommentBtn.addEventListener('click', function (e) {
+            imgInputElem.inputElem.textContent = '';
+        });
+
+        addCommentBtn.addEventListener('click', function (e) {
+            const inputElem = document.createElement('input');
+            inputElem.type = 'text';
+            inputElem.placeholder = 'enter your comment';
+            imgInputElem.appendChild(inputElem);
+            // commentArray[commentCount] = input.value;
+            // commentCount++;
+        });
+
+        input.addEventListener('change', function () {
+            commentArray[commentCount] = input.value;
+            commentCount++;
+            console.log(commentArray);
+        });
+    });
+    
+    </script>
+
+</body>
+
+</html>

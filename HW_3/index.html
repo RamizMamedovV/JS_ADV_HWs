@@ -7,51 +7,42 @@
     <title>Document</title>
     <style>
         body {
-            margin: 0;
+            font-family: Arial, sans-serif;
+            max-width: 800px;
             display: flex;
             flex-direction: column;
-            position: relative;
+            /* margin: 0 auto; */
+            padding: 20px;
+            background: #d3c7c7;
         }
 
-        .main {
-            position: absolute;
-            top: 50px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .header {
-            background: #bfa7a7;
-            height: 50px;
-            width: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            display: flex;
-            justify-content: end;
-            align-items: center;
-        }
-
-        span {
-            display: flex;
-            justify-content: center;
-            width: 80%;
-        }
-
-        .btn {
-            height: 50px;
-            width: 150px;
-            background: #e7d4d4;
-        }
-
-        .commentsBtns {
-            display: flex;
-            gap: 20px;
+        label {
+            cursor: pointer;
         }
 
         input {
-            width: 250px;
-            height: 150px;
+            margin-left: 50px;
+            max-width: 200px;
+        }
+
+        textarea {
+            margin-left: 50px;
+            max-width: 500px;
+            height: 100px;
+        }
+
+        .btn {
+            width: 150px;
+            height: 50px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .addBtn:hover {
+            width: 160px;
+            height: 55px;
         }
     </style>
 </head>
@@ -72,80 +63,92 @@
     При клике на название продукта отображается список всех отзывов по этому продукту.
     Возможность удаления отзыва (при нажатии на кнопку "Удалить" рядом с отзывом, данный отзыв удаляется из LocalStorage).
     -->
+    
+    <h1>Reviews and Preferences</h1>
 
-    <div class="header">
-        <span>YOU CAN ADD PRODUCT</span>
-        <button style="margin: 0 50px; height: 100%;" class="addProduct btn">ADD PRODUCT</button>
-    </div>
-    <div class="main">
-        <div class="imgInputElem"></div>
-        <div class="commentsBtns"></div>
+    <label for="inputId">Enter Title:</label>
+    <input type="text" class="inputClass" id="inputId" placeholder="enter title and press enter" required>
+
+    <label for="textId" class="textLable hidden">Enter Your Comment:</label>
+    <textarea name="textArea" id="textId" class="textAreaClass hidden"></textarea>
+
+    <button class="addBtn btn hidden">ADD COMMENT</button>
+    <!-- <button class="addBtn hidden">ADD COMMENT</button> -->
+    <div class="commentsArea">
+        <p class="comments"></p>
+        <button class="delBtn btn hidden">DELETE COMMENT</button>
     </div>
 
     <script>
-        const addBtn = document.querySelector('.addProduct');
-        const main = document.querySelector('.main');
-        const imgInputElem = document.querySelector('.imgInputElem');
-        const commentsBtns = document.querySelector('.commentsBtns');
 
-        // const commentArray = [];
-        // localStorage.setItem('comments')
+        // localStorage.clear();
+
+        const commentsArea = document.querySelector('.commentsArea');
+        const commentsEl = document.querySelector('.comments');
+        const delBtn = document.querySelector('.delBtn');
         
-        window.addEventListener('load', function (e) {
-            const commentArray = localStorage.getItem('comments') || [];
-            let commentCount = commentArray.length;
-            console.log(commentArray);
-            console.log(commentCount);
-            if(commentCount > 0) fillWeb(commentArray);
+        const inputEl = document.querySelector('.inputClass');
+
+        const textLable = document.querySelector('.textLable');
+        const commentEl = document.querySelector('.textAreaClass');
+
+        const addBtn = document.querySelector('.addBtn');
+
+        let newTitle = '';
+        let comment = '';
+
+        inputEl.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                newTitle = inputEl.value.trim();
+                const hasTitle = localStorage.getItem(newTitle) || false;
+                if (hasTitle) {
+                    processData(hasTitle);
+                } else if (newTitle) {
+
+                    console.log(newTitle);
+                    textLable.classList.remove('hidden');
+                    commentEl.classList.remove('hidden');
+                    commentEl.focus();
+                }
+
+            }
         });
 
-        function fillWeb(array) {
-            array.forEach(element => {
-                
-            });
-        }
+        commentEl.addEventListener('input', function (e) {
+
+            comment = commentEl.value.trim();
+
+            if (comment.length > 0) {
+
+                addBtn.classList.remove('hidden');
+            }
+        });
 
         addBtn.addEventListener('click', function (e) {
-            const img = document.createElement('img');
-            img.src = '../';
-            img.alt = 'FOTO';
 
-            const addCommentBtn = document.createElement('button');
-            addCommentBtn.classList.add('btn');
-            addCommentBtn.textContent = 'ADD COMMENT';
-
-            const delCommentBtn = document.createElement('button');
-            delCommentBtn.classList.add('btn');
-            delCommentBtn.textContent = 'DELETE COMMENT';
-
-
-            imgInputElem.appendChild(img);
-            commentsBtns.appendChild(addCommentBtn);
-            commentsBtns.appendChild(delCommentBtn);
-        // });
-
-        delCommentBtn.addEventListener('click', function (e) {
-            imgInputElem.inputElem.textContent = '';
+            localStorage.setItem(newTitle, comment);
+            alert('new comment added');
+            addBtn.classList.add('hidden');
+            textLable.classList.add('hidden');
+            commentEl.classList.add('hidden');
+            inputEl.value = '';
         });
 
-        addCommentBtn.addEventListener('click', function (e) {
-            const inputElem = document.createElement('input');
-            inputElem.type = 'text';
-            inputElem.placeholder = 'enter your comment';
-            imgInputElem.appendChild(inputElem);
-            // commentArray[commentCount] = input.value;
-            // commentCount++;
+        function processData(title) {
+            commentsEl.textContent = title;
+            delBtn.classList.remove('hidden');
+        }
+
+        delBtn.addEventListener('click', function (e) {
+
+            localStorage.removeItem(newTitle);
+            alert('the comment deleted');
+            delBtn.classList.add('hidden');
+            commentsArea.classList.add('hidden');
+            inputEl.value = '';
         });
 
-        input.addEventListener('change', function () {
-            commentArray[commentCount] = input.value;
-            commentCount++;
-            console.log(commentArray);
-        });
-    });
-    
     </script>
-
 </body>
 
 </html>
