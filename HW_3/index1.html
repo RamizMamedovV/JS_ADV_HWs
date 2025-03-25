@@ -60,7 +60,9 @@
 </head>
 
 <body>
-    <div class="main">
+    <div id="iframeDiv"></div>
+    <div id="main" class="main">
+        <!-- <iframe src="./iframe.html" frameborder="0" width="100"></iframe> -->
         <div class="item">
             <div class="img">
 
@@ -130,14 +132,27 @@
     </div>
 
     <script>
+        // const createElM = require('iframeJs.js');
+
+        import { createEl } from './iframeJs.js5';
+
         const btns = document.querySelectorAll('button');
+        const main = document.querySelector('body');
+        // const main = document.getElementById('body');
 
         btns.forEach(btn => {
             btn.addEventListener('click', function (e) {
+                main.innerHTML = '';
                 if (btn.textContent === 'ADD COMMENT') {
-                    
+                    window.location.href = './iframe.html';
+                    // const iframeEl = document.createElement('iframe');
+                    // iframeEl.width = '500px';
+                    // iframeEl.height = '500px';
+                    // iframeEl.src = './iframe.html';
+                    // iframeDiv.appendChild(iframeEl);
+                    createEl('./AminA.png', btn.textContent);
                 } else {
-                    
+                    console.log('not found');
                 }
             });
         });

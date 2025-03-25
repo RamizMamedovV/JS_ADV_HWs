@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        .main {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 5px;
+        }
+
+        .item {
+            /* min-height: auto; */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgb(188, 131, 99);
+        }
+
+        .title {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70px;
+            width: 130px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <div class="item">
+            <h1 class="title">TITLE1</h1>
+            <button data-id="1" class="btn">GO TO</button>
+        </div>
+        <div class="item">
+            <h1 class="title">TITLE2</h1>
+            <button data-id="2" class="btn">GO TO</button>
+        </div>
+        <div class="item">
+            <h1 class="title">TITLE3</h1>
+            <button data-id="3" class="btn">GO TO</button>
+        </div>
+        <div class="item">
+            <h1 class="title">TITLE4</h1>
+            <button data-id="4" class="btn">GO TO</button>
+        </div>
+        <div class="item">
+            <h1 class="title">TITLE5</h1>
+            <button data-id="5" class="btn">GO TO</button>
+        </div>
+        <div class="item">
+            <h1 id="title" class="title">TITLE6</h1>
+            <button data-id="6" class="btn">GO TO</button>
+        </div>
+    </div>
+
+    <script>
+
+        // localStorage.clear();
+
+        const btns = document.querySelectorAll('.btn');
+        const main = document.querySelector('.main');
+
+        btns.forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                const commentid = 'id' + btn.dataset.id;
+                const parent = btn.closest('.item');
+                const title = parent.querySelector('.title').textContent
+                console.log(title);
+                console.log(commentid);
+                main.innerHTML = '';
+
+                main.classList.remove('main')
+                main.classList.add('item');
+                const item = document.createElement('div');
+                const newTitle = document.createElement('h1');
+                newTitle.textContent = title;
+
+                item.appendChild(newTitle);
+                main.appendChild(item);
+
+                const inputAndButtonsDiv = document.createElement('div');
+                inputAndButtonsDiv.style.display = 'flex';
+                // inputAndButtonsDiv.style.flexDirection = 'row';
+                // inputAndButtonsDiv.style.justifyContent = 'center';
+                inputAndButtonsDiv.style.alignItems = 'center';
+                main.appendChild(inputAndButtonsDiv);
+
+                const inputArea = document.createElement('input');
+                inputArea.placeholder = 'enter your comment no more 50 character'
+                inputArea.style.width = '300px';
+                inputArea.style.height = '200px';
+                inputAndButtonsDiv.appendChild(inputArea);
+
+                const buttonsDiv = document.createElement('div');
+                buttonsDiv.style.display = 'flex';
+                buttonsDiv.style.flexDirection = 'column';
+                buttonsDiv.style.justifyContent = 'center';
+                buttonsDiv.style.alignItems = 'center';
+                inputAndButtonsDiv.appendChild(buttonsDiv);
+
+                const addBtn = document.createElement('button');
+                addBtn.disabled = true;
+                addBtn.classList.add('btn');
+                addBtn.textContent = 'ADD COMMENT';
+                buttonsDiv.appendChild(addBtn);
+
+
+
+                const commentsDiv = document.createElement('div');
+                main.appendChild(commentsDiv);
+
+                const comments = JSON.parse(localStorage.getItem('commentid')) || [];
+                console.log(comments.length);
+                console.log(comments);
+                console.log(typeof (comments));
+                const ulEl = document.createElement('ul');
+                main.appendChild(ulEl);
+                if (comments.length > 0) {
+
+                    for (let i = 0; i < comments.length; i++) {
+                        const liEl = document.createElement('li');
+                        ulEl.appendChild(liEl);
+                        // liEl.textContent = element;
+                        liEl.textContent = comments[i];
+
+                        const delBtn = document.createElement('button');
+                        delBtn.classList.add('btn');
+                        delBtn.textContent = 'DELETE COMMENT';
+                        liEl.appendChild(delBtn);
+                    }
+                }
+
+                const newComment = '';
+
+                inputArea.addEventListener('change', function (e) {
+                    const newComment = inputArea.value;
+                    console.log(newComment);
+                    if (newComment.length > 0) {
+                        // const addBtn = document.querySelector('.btn');
+                        // addBtn.disabled = false;
+                        const index = comments.length;
+                        // comments[index] = JSON.stringify(newComment);
+                        comments[index] = newComment;
+
+                        console.log(comments);
+                        localStorage.setItem('commentid', JSON.stringify(comments));
+
+                        inputArea.value = '';
+                        addBtn.disabled = true;
+
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
